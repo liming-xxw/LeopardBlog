@@ -1,22 +1,86 @@
 <template>
-  <div class="sudebar drop-shadow-sm bg-white">
-    <div class="sidebar-overflow">
-      <sidebar-logo />
-      <sidebar-menu />
+  <div class="sidebar-Adaptation">
+    <div
+      class="sudebar drop-shadow-sm bg-white transition duration-500 ease-in-out"
+      :class="{ tran: visible }"
+    >
+      <div class="sidebar-overflow">
+        <sidebar-logo />
+        <sidebar-menu />
+      </div>
+      <sidebar-bottom />
     </div>
-    <sidebar-bottom />
+    <div class="sidebar_conten"></div>
+    <div
+      class="sidebar_but  bg-white rounded-md"
+      :style="{ 'margin-left': sidebar_but_tran + 'rem' }"
+      @click="VisibleClick"
+    >
+      <ViewListIcon />
+    </div>
   </div>
-  <div class="sidebar_conten"></div>
 </template>
 
-
-<script>
+<script lang="ts">
+import { ViewListIcon } from "@heroicons/vue/outline";
 export default {
-    name:"sidebar"
-}
+  name: "sidebar",
+  components: {
+    ViewListIcon,
+  },
+  setup() {
+    const visible = ref<boolean>(false);
+    const sidebar_but_tran = ref<number>(0);
+    const VisibleClick = () => {
+      visible.value = !visible.value;
+      sidebar_but_tran.value == 0
+        ? (sidebar_but_tran.value = 16.625)
+        : (sidebar_but_tran.value = 0);
+    };
+    return {
+      visible,
+      VisibleClick,
+      sidebar_but_tran,
+    };
+  },
+};
 </script>
 
 <style lang="scss" scoped>
+.sidebar-Adaptation {
+  @media screen and (min-width: 100px) and (max-width: 1200px) {
+    .sudebar {
+      transform: translateX(-100%);
+    }
+    .sidebar_conten {
+      display: none;
+    }
+    .sidebar_but {
+      transform: translate(0%, -50%);
+    }
+  }
+}
+
+.tran {
+  transform: translateX(0%) !important;
+}
+.sidebar_but {
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  top: 50%;
+  transform: translate(-100%, -50%);
+  z-index: 2;
+  cursor: pointer;
+  transition: 500ms;
+}
+.sidebar_but_focus {
+  margin-left: 16.625rem;
+}
+.sidebar_but_no_focus {
+  margin-left: -16.625rem;
+}
+
 .sidebar_conten {
   width: 16.625rem;
   height: 100vh;
@@ -25,6 +89,7 @@ export default {
   width: 16.625rem;
   height: 100vh;
   position: fixed;
+  z-index: 1;
   .sidebar-overflow {
     height: 80vh;
     overflow: hidden;

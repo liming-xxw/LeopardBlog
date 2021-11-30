@@ -1,6 +1,6 @@
 <template>
-  <div class="content bg-white">
-      asdasdas
+  <div class="content ">
+     <content-slide />
   </div>
 </template>
 

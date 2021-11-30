@@ -1,8 +1,7 @@
 <template>
   <div class="home">
     <sidebar />
-
-    <div class="content">
+    <div class="content transition duration-500 ease-in-out">
       <content-header />
       <NuxtChild />
     </div>

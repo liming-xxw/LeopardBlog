@@ -21,6 +21,7 @@ export default {};
 
 <style lang="scss" scoped>
 .search{
+    padding: 10px 10px 0px 10px;
     .search-input{
         width: 400px;
     }
