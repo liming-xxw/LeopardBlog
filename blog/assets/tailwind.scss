@@ -1,3 +1,25 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+
+
+// .page-enter-active,
+// .page-leave-active {
+//   transition: opacity 1s;
+// }
+
+// .page-enter,
+// .page-leave-active {
+//   opacity: 0;
+// }
+
+
+.home-enter-active,
+.home-leave-active {
+  transition: opacity 1s;
+}
+
+.home-enter,
+.home-leave-active {
+  opacity: 0;
+}

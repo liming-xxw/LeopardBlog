@@ -12,9 +12,10 @@
           :class="enabled ? 'translate-x-9' : 'translate-x-0'"
           class="pointer-events-none inline-block h-[1.25rem] w-[1.25rem] rounded-full bg-white shadow-lg transform ring-0 transition ease-in-out duration-200"
         />
-      </Switch><p>深色模式</p>
+      </Switch>
+      <p v-show="!sldebar">深色模式</p>
     </div>
-    <div class="sidebar_but">
+    <div class="sidebar_but" @click="SldebarClick">
       <MenuAlt1Icon class="buticon" />
     </div>
   </div>
@@ -28,10 +29,15 @@ export default {
     MenuAlt1Icon,
     Switch,
   },
-  setup() {
+  setup(props,ctx) {
     const enabled = ref(false);
+    const sldebar = ref<boolean>(false);
 
-    return { enabled };
+    const SldebarClick = () => {
+      sldebar.value = !sldebar.value;
+      ctx.emit("change",sldebar.value);
+    };
+    return { enabled, sldebar, SldebarClick };
   },
 };
 </script>

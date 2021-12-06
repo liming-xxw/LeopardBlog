@@ -1,27 +1,33 @@
 <template>
-  <div class="content-slide bg-white rounded-md">
-    <div class="slide-items">
-      <content-admin-project />
-      <div></div>
+  <div class="content-box">
+    <div class="content-slide    bg-white shadow-md rounded-md">
+      <div class="slide-items">
+        <content-admin-project />
+        <div></div>
+      </div>
+    </div>
+    <div class="button-list">
+      <div
+        class="button-list-but rounded-full button-list-but-active duration-500 ease-in-out bg-blue-400"
+      ></div>
+      <div class="button-list-but rounded-full duration-500 ease-in-out"></div>
     </div>
   </div>
 
-  <div class="button-list">
-    <div
-      class="button-list-but rounded-full button-list-but-active duration-500 ease-in-out bg-blue-400"
-    ></div>
-    <div class="button-list-but rounded-full duration-500 ease-in-out"></div>
-  </div>
+  <content-module-data />
 </template>
 
 <style lang="scss" scoped>
+.content-box{
+  position: relative;
+}
 .content-slide {
   // padding: 20px;
 }
 .button-list {
   position: absolute;
   right: 35px;
-  bottom: -10px;
+  bottom: -20px;
   display: flex;
   gap: 10px;
   width: 70px;
@@ -30,7 +36,7 @@
     flex: 1;
     height: 10px;
     cursor: pointer;
-    color: rgba(0, 0, 0, .4);
+    color: rgba(0, 0, 0, 0.4);
     &:hover {
       background-color: #9dbdc6;
     }
