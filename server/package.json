@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@nestjs/common": "^7.5.1",
+    "@nestjs/config": "^1.1.5",
     "@nestjs/core": "^7.5.1",
     "@nestjs/platform-express": "^7.5.1",
     "@nestjs/schedule": "^1.0.1",
@@ -78,7 +79,9 @@
     ],
     "moduleNameMapper": {
       "@libs/db/(.*)": "<rootDir>/libs/db/src/$1",
-      "@libs/db": "<rootDir>/libs/db/src"
+      "@libs/db": "<rootDir>/libs/db/src",
+      "@app/common/(.*)": "<rootDir>/libs/common/src/$1",
+      "@app/common": "<rootDir>/libs/common/src"
     }
   }
 }
