@@ -36,6 +36,7 @@
 </template>
 
 <style lang="scss" scoped>
+@import "../../assets/mixin.scss";
 .leopard-admin-project {
   @media screen and (min-width: 100px) and (max-width: 1200px) {
     flex-direction: column-reverse;
@@ -51,8 +52,6 @@
 
 .leopard-admin-project {
   min-height: 500px;
-  //   height: 500px;
-
   display: flex;
   justify-content: space-between;
   .project-describe {
@@ -61,6 +60,7 @@
     .leopard-admin-peoject-title {
       font-size: 30px;
       font-weight: 700;
+      @include font_color($font-color-232122);
     }
     .leopard-admin-peoject-modular {
       padding-top: 20px;
@@ -69,12 +69,12 @@
       color: #9dbdc6;
     }
     .leopard-admin-project-introduce {
-      color: #272f32;
-      width: 449px;
+      width: 100%;
       padding-top: 20px;
       font-size: 14px;
       word-break: hyphenate;
       line-height: 30px;
+      @include font_color($font-color-232122);
     }
     .leopard-admin-project-but-list {
       margin-top: 40px;
@@ -103,6 +103,7 @@
       .link {
         font-size: 13px;
         cursor: pointer;
+        @include font_color($font-color-232122);
       }
     }
   }

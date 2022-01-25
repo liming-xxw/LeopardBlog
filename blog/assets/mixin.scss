@@ -2,108 +2,163 @@
 @import "./variable.scss";
 
 
-@mixin font_size($size){/*通过该函数设置字体大小，后期方便统一管理；*/
+@mixin font_size($size) {
+  /*通过该函数设置字体大小，后期方便统一管理；*/
   @include font-dpr($size);
 }
-@mixin font_color($color){/*通过该函数设置字体颜色，后期方便统一管理；*/
-	color:$color;
+
+@mixin font_color($color) {
+  /*通过该函数设置字体颜色，后期方便统一管理；*/
+  color: $color !important;
+
   [data-theme="theme1"] & {
-    color:$font-color-theme1;
+    color: $font-color-2B5575 !important;
   }
+
   [data-theme="theme2"] & {
-    color:$font-color-theme2;
+    color: $font-color-c6875c;
   }
+
   [data-theme="theme3"] & {
-    color:$font-color-theme3;
+    color: $font-color-c6875c;
   }
 }
-@mixin bg_color($color){/*通过该函数设置主题颜色，后期方便统一管理；*/
-  background-color:$color;
+
+@mixin bg_color($color) {
+  /*通过该函数设置主题颜色，后期方便统一管理；*/
+  background-color: $color;
+
   [data-theme="theme1"] & {
-    background-color:$background-color-theme1;
+    background-color: $background-color-theme1;
   }
+
   [data-theme="theme2"] & {
-    background-color:$background-color-theme2;
+    background-color: $background-color-theme2;
   }
+
   [data-theme="theme3"] & {
-    background-color:$background-color-theme3;
+    background-color: $background-color-theme3;
   }
 }
+
+@mixin box_shadow($color) {
+  box-shadow: $color;
+
+  [data-theme="theme1"] & {
+    box-shadow: $box-shadow-color-theme1;
+  }
+}
+
+
 /*px转rem*/
-@mixin px2rem($property,$px,$px2:false,$px3:false,$px4:false){
-	$rem:75px;/* 设计稿尺寸/10 */
+@mixin px2rem($property, $px, $px2:false, $px3:false, $px4:false) {
+  $rem: 75px;
+
+  /* 设计稿尺寸/10 */
   @if $px and $px2 and $px3 and $px4 {
     #{$property}: ($px / $rem) + rem ($px2 / $rem) + rem ($px3 / $rem) + rem ($px4 / $rem) + rem;
   }
+
   @else if $px and $px2 {
-		#{$property}: ($px / $rem) + rem ($px2 / $rem) + rem;
-		//[data-model='pad'] & {#{$property}: ($px * 1.4 / $rem) + rem ($px2 * 1.4 / $rem) + rem;}
-	}
-	@else{
-		#{$property}: ($px / $rem) + rem!important;
-		//[data-model='pad'] & {#{$property}: ($px * 1.4 / $rem) + rem;}
-	}
-}
- 
-/*根据dpr计算font-size*/
-@mixin font-dpr($font-size){
-	font-size: $font-size;
-	//[data-model="pad"] & { font-size: $font-size * 1.4; }
-	[data-dpr="2"] & { font-size: $font-size * 2;}
-	[data-dpr="3"] & { font-size: $font-size * 3;}
-}
- 
-/*弹性盒属性*/
-%flexbox{
-	display: inline-flex;display: -webkit-flex;display: flex;
-}
-/*弹性盒比例*/
-@mixin flex($num:1){
-	-webkit-box-flex:$num;-moz-box-flex:$num;-webkit-flex:$num;-ms-flex:$num;flex:$num;
-}
-/*超行溢出显示省略号*/
-@mixin overflow($num:1,$fontSize:0,$lineHeight:1.5){
-  display: -webkit-box;-webkit-line-clamp:$num; overflow: hidden;
-  /*! autoprefixer: off */
-  -webkit-box-orient: vertical;
-  /* autoprefixer: on */
-  @if $fontSize!=0 and $lineHeight{/*高度需要撑开*/
-    line-height:$lineHeight;
-    @if $lineHeight < 1.2 {
-      line-height:1.2; /*最小需要1.2，否则在部分安卓机下第$num+1行会顶部漏出*/
-    }
-    height: $num * $fontSize * $lineHeight;
-    [data-dpr="2"] & { height: $num * $fontSize * $lineHeight * 2!important;}
-    [data-dpr="3"] & { height: $num * $fontSize * $lineHeight * 3!important;}
+    #{$property}: ($px / $rem) + rem ($px2 / $rem) + rem;
+    //[data-model='pad'] & {#{$property}: ($px * 1.4 / $rem) + rem ($px2 * 1.4 / $rem) + rem;}
+  }
+
+  @else {
+    #{$property}: ($px / $rem) + rem !important;
+    //[data-model='pad'] & {#{$property}: ($px * 1.4 / $rem) + rem;}
   }
 }
- 
+
+/*根据dpr计算font-size*/
+@mixin font-dpr($font-size) {
+  font-size: $font-size;
+
+  //[data-model="pad"] & { font-size: $font-size * 1.4; }
+  [data-dpr="2"] & {
+    font-size: $font-size * 2;
+  }
+
+  [data-dpr="3"] & {
+    font-size: $font-size * 3;
+  }
+}
+
+/*弹性盒属性*/
+%flexbox {
+  display: inline-flex;
+  display: -webkit-flex;
+  display: flex;
+}
+
+/*弹性盒比例*/
+@mixin flex($num:1) {
+  -webkit-box-flex: $num;
+  -moz-box-flex: $num;
+  -webkit-flex: $num;
+  -ms-flex: $num;
+  flex: $num;
+}
+
+/*超行溢出显示省略号*/
+@mixin overflow($num:1, $fontSize:0, $lineHeight:1.5) {
+  display: -webkit-box;
+  -webkit-line-clamp: $num;
+  overflow: hidden;
+  /*! autoprefixer: off */
+  -webkit-box-orient: vertical;
+
+  /* autoprefixer: on */
+  @if $fontSize !=0 and $lineHeight {
+    /*高度需要撑开*/
+    line-height: $lineHeight;
+
+    @if $lineHeight < 1.2 {
+      line-height: 1.2;
+      /*最小需要1.2，否则在部分安卓机下第$num+1行会顶部漏出*/
+    }
+
+    height: $num * $fontSize * $lineHeight;
+
+    [data-dpr="2"] & {
+      height: $num * $fontSize * $lineHeight * 2 !important;
+    }
+
+    [data-dpr="3"] & {
+      height: $num * $fontSize * $lineHeight * 3 !important;
+    }
+  }
+}
+
 //transition兼容写法
-@mixin transition($content:all .2s){
+@mixin transition($content:all .2s) {
   -moz-transition: $content;
   -webkit-transition: $content;
   -o-transition: $content;
   transition: $content;
 }
+
 //transfrom兼容
-@mixin translateX($num:-50%){
+@mixin translateX($num:-50%) {
   -ms-transform: translateX($num);
   -moz-transform: translateX($num);
   -webkit-transform: translateX($num);
   -o-transform: translateX($num);
   transform: translateX($num);
 }
-@mixin translateY($num:-50%){
+
+@mixin translateY($num:-50%) {
   -ms-transform: translateY($num);
   -moz-transform: translateY($num);
   -webkit-transform: translateY($num);
   -o-transform: translateY($num);
   transform: translateY($num);
 }
-@mixin rotate($deg:90deg){
-  -ms-transform:rotate($deg);
-  -moz-transform:rotate($deg);
-  -webkit-transform:rotate($deg);
-  -o-transform:rotate($deg);
-  transform:rotate($deg);
+
+@mixin rotate($deg:90deg) {
+  -ms-transform: rotate($deg);
+  -moz-transform: rotate($deg);
+  -webkit-transform: rotate($deg);
+  -o-transform: rotate($deg);
+  transform: rotate($deg);
 }

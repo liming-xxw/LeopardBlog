@@ -1,7 +1,7 @@
 <template>
   <div class="sidebar-Adaptation">
     <div
-      class="sudebar drop-shadow-sm bg-white transition duration-500 ease-in-out shadow-md"
+      class="sudebar drop-shadow-sm transition duration-500 ease-in-out"
       :class="{ tran: visible, sidebar_menu: sldebar }"
     >
       <div class="sidebar-overflow">
@@ -55,6 +55,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/mixin.scss";
+
 .sidebar-Adaptation {
   @media screen and (min-width: 100px) and (max-width: 1200px) {
     .sudebar {
@@ -77,7 +79,7 @@ export default {
   width: 35px;
   height: 35px;
   top: 50%;
-  
+
   transform: translate(-100%, -50%);
   z-index: 2;
   cursor: pointer;
@@ -105,6 +107,8 @@ export default {
   position: fixed;
   z-index: 1;
   transition: 300ms;
+  @include bg_color($background-color-dark);
+  @include box_shadow($box-shadow-color);
   .sidebar-overflow {
     height: 80vh;
     overflow: hidden;

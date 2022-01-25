@@ -1,42 +1,66 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import { BaseEntity } from './base.entity';
+import { BlogAndTag } from './blogandtag.entity';
 import { Tag } from './tag.entity';
 import { User } from './user.entity';
 
 @Entity()
 export class Blog extends BaseEntity {
-  @Column()
+  @Column({
+    nullable: true,
+  })
   title: String;
 
-  @Column()
+  @Column({
+    type: 'text',
+    nullable: true,
+  })
   content: string;
 
-  @Column()
+  @Column({
+    type: 'text',
+    nullable: true,
+  })
   htmlcontent: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   introduce: string;
 
-  @OneToOne((type) => Tag)
-  @JoinColumn()
+  @ManyToOne(() => Tag, (Tag) => Tag.grade)
   type: Tag;
 
-  @ManyToOne(() => Tag, (tag) => tag.blogs)
-  tags: Tag;
+  @OneToMany(() => BlogAndTag, (tag) => tag.blogid)
+  tags: BlogAndTag[];
 
-  @OneToOne((type) => User)
-  @JoinColumn()
+  @ManyToOne(() => User, (user) => user.nickname)
   author: User;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   cover: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   topping: boolean;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   hot: boolean;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   recommend: boolean;
 }

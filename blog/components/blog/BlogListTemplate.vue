@@ -1,48 +1,52 @@
 <template>
-  <div class="bloglisttemplate bg-white rounded-lg shadow-md">
-    <div class="blog-list-tmplate-item">
-      <div class="blog-list-tmplate-item-img">
-        <div class="rounded-lg"></div>
+  <nuxt-link :to="`/blogs/${data.id}`" target="_blank">
+    <div class="bloglisttemplate rounded-lg shadow-md">
+      <div class="blog-list-tmplate-item">
+        <div class="blog-list-tmplate-item-img">
+          <div
+            class="rounded-lg"
+            :style="{ backgroundImage: 'url(' + data.cover + ')' }"
+          ></div>
+        </div>
+        <div class="blog-list-tmplate-item-introduce">
+          <h4>{{ data.title }}</h4>
+          <div class="blog-list-tmplate-item-introduce-js">
+            {{ data.introduce }}
+          </div>
+          <div class="blog-list-tmplate-item-introduce-b">
+            前端:{{ data.tags }}
+            <p>{{ data.date }}</p>
+          </div>
+        </div>
       </div>
-      <div class="blog-list-tmplate-item-introduce">
-        <h4>{{ data.title }}</h4>
-        <div class="blog-list-tmplate-item-introduce-js">
-          {{ data.introduce }}
-        </div>
-        <div class="blog-list-tmplate-item-introduce-b">
-          前端:{{ data.tags }}
-          <p>{{ data.date }}</p>
-        </div>
+      <div class="blog-list-tmplate-icon">
+        <span class="icon-item">
+          <span style="width: 15px; height: 15px">
+            <EyeIcon />
+          </span>
+          {{ data.views ? data.views : 0 }}
+        </span>
+        <span class="icon-item">
+          <span style="width: 15px; height: 15px">
+            <ThumbUpIcon />
+          </span>
+          {{ data.links ? data.links : 0 }}
+        </span>
+        <span class="icon-item">
+          <span style="width: 15px; height: 15px">
+            <FolderOpenIcon />
+          </span>
+          {{ data.collections ? data.collections : 0 }}
+        </span>
+        <span class="icon-item">
+          <span style="width: 15px; height: 15px">
+            <ChatIcon />
+          </span>
+          {{ data.comments ? data.comments : 0 }}
+        </span>
       </div>
     </div>
-    <div class="blog-list-tmplate-icon">
-      <span class="icon-item">
-        <span style="width: 15px; height: 15px">
-          <EyeIcon />
-        </span>
-
-        {{ data.views }}
-      </span>
-      <span class="icon-item">
-        <span style="width: 15px; height: 15px">
-          <ThumbUpIcon />
-        </span>
-        {{ data.links }}
-      </span>
-      <span class="icon-item">
-        <span style="width: 15px; height: 15px">
-          <FolderOpenIcon />
-        </span>
-        {{ data.collections }}
-      </span>
-      <span class="icon-item">
-        <span style="width: 15px; height: 15px">
-          <ChatIcon />
-        </span>
-        {{ data.comments }}
-      </span>
-    </div>
-  </div>
+  </nuxt-link>
 </template>
 
 <script lang="ts">
@@ -63,6 +67,7 @@ export default {
     data: {
       type: Object,
       default: {
+        id: "0",
         title: "数据传输失败",
         introduce:
           "12 月 3 日，历史上的今天，Fortran 语言之父 John Warner Backus 出生",
@@ -80,10 +85,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/mixin.scss";
 .bloglisttemplate {
   padding: 20px;
   display: flex;
   justify-content: space-between;
+  @include bg_color($background-color-dark);
+  @include box_shadow($box-shadow-color);
   @media screen and (min-width: 100px) and (max-width: 987px) {
     flex-direction: column;
     .blog-list-tmplate-item {
@@ -103,9 +111,9 @@ export default {
     }
   }
   .blog-list-tmplate-item {
-    flex: 0 0 64%;
+    flex: 0 0 70%;
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
     .blog-list-tmplate-item-img {
       width: 15.125rem;
       height: 160px;
@@ -116,14 +124,14 @@ export default {
       div {
         width: 14.125rem;
         height: 160px;
-        background-image: url("../../assets/images/images/wh.jpg");
         background-size: cover;
-        background-position: center 0;
-        background-repeat: no-repeat;
+        background-position: center 0px;
+        // background-repeat: no-repeat;
       }
     }
     .blog-list-tmplate-item-introduce {
-      flex: 0 0 33%;
+      flex: 0 0 63%;
+      margin-left: 30px;
       h4 {
         display: block;
         width: 100%;
@@ -140,6 +148,11 @@ export default {
         word-break: normal;
         font-size: 13px;
         margin-top: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 5;
+        -webkit-box-orient: vertical;
       }
       .blog-list-tmplate-item-introduce-b {
         width: 100%;

@@ -24,6 +24,9 @@ export default {};
     padding: 10px 10px 0px 10px;
     .search-input{
         width: 400px;
+         @media screen and (min-width: 100px) and (max-width: 1200px) {
+           
+         }
     }
 }
 </style>

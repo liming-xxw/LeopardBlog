@@ -1,6 +1,10 @@
 <template>
   <div class="BlogCreate">
-    <MdEditor v-model="blogvalue.content"></MdEditor>
+    <MdEditor
+      v-model="blogvalue.content"
+      @onHtmlChanged="onHtmlChanged"
+      @onUploadImg="onUploadImg"
+    ></MdEditor>
     <div class="but-list">
       <a-button>草稿</a-button>
       <a-button type="primary" @click="visible = true">保存</a-button>
@@ -45,27 +49,27 @@
           </a-form-item>
           <a-form-item label="作者">
             <a-select
-              v-model:value="blogvalue.type"
-              :options="typeopion"
+              v-model:value="blogvalue.author"
+              :options="UserOption"
             ></a-select>
           </a-form-item>
           <a-form-item label="置顶" :wrapper-col="{ span: 14, offset: 0 }">
             <a-switch v-model:checked="blogvalue.topping" />
           </a-form-item>
           <a-form-item label="推荐" :wrapper-col="{ span: 14, offset: 0 }">
-            <a-switch v-model:checked="blogvalue.topping" />
+            <a-switch v-model:checked="blogvalue.hot" />
           </a-form-item>
           <a-form-item label="热门" :wrapper-col="{ span: 14, offset: 0 }">
-            <a-switch v-model:checked="blogvalue.topping" />
+            <a-switch v-model:checked="blogvalue.recommend" />
           </a-form-item>
           <a-form-item label="封面" :wrapper-col="{ span: 0, offset: 2 }">
             <a-upload
               v-model:file-list="fileList"
-              name="avatar"
+              name="file"
               list-type="picture-card"
               class="avatar-uploader"
               :show-upload-list="false"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+              :action="uploadcard"
               :before-upload="beforeUpload"
               @change="handleChange"
             >
@@ -88,13 +92,18 @@
 </template>
 
 <script lang="ts" setup>
+import { uploadcard } from "../../service/api";
 import MdEditor from "md-editor-v3";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons-vue";
 import "md-editor-v3/lib/style.css";
 import { onMounted, reactive, ref } from "vue";
 import { TagList } from "../../service/Tags";
+import { fucupload } from "../../service/upload";
 import { option, Tags } from "../../interface/interfaceUtils";
-
+import { BlogCreateFuc } from "../../service/blog";
+import { Item } from "ant-design-vue/lib/menu";
+import { message } from "ant-design-vue";
+import { UserListFuc } from "../../service/user";
 // ts
 interface blogvaluets {
   title: string;
@@ -103,14 +112,88 @@ interface blogvaluets {
   type: string;
   tags?: string;
   author: string;
-  cover: string;
+  cover?: string;
   introduce: string;
   topping: boolean;
+  hot?: boolean;
+  recommend?: boolean;
+}
+
+interface FileItem {
+  uid: string;
+  name?: string;
+  status?: string;
+  response?: {
+    url: string;
+  };
+  url?: string;
+  type?: string;
+  size: number;
+  originFileObj: any;
+}
+
+interface FileInfo {
+  file: FileItem;
+  fileList: FileItem[];
 }
 
 const tagslist = ref<Tags[]>([]);
 const TagOption = ref<option[]>([]);
-const tagsoption = ref<option[]>([]);
+const UserOption = ref<option[]>([]);
+const tagsoption = ref<option[] | undefined>([]);
+const loading = ref<boolean>(false);
+const imageUrl = ref<string>("");
+const fileList = ref([]);
+
+function getBase64(img: Blob, callback: (base64Url: string) => void) {
+  const reader = new FileReader();
+  reader.addEventListener("load", () => callback(reader.result as string));
+  reader.readAsDataURL(img);
+}
+
+const beforeUpload = (file: FileItem) => {
+  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+  if (!isJpgOrPng) {
+    message.error("You can only upload JPG file!");
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    message.error("Image must smaller than 2MB!");
+  }
+  return isJpgOrPng && isLt2M;
+};
+
+const handleChange = (info: FileInfo) => {
+  if (info.file.status === "uploading") {
+    loading.value = true;
+    return;
+  }
+  if (info.file.status === "done") {
+    blogvalue.cover = info.file.response?.url;
+    getBase64(info.file.originFileObj, (base64Url: string) => {
+      imageUrl.value = base64Url;
+      loading.value = false;
+    });
+  }
+  if (info.file.status === "error") {
+    loading.value = false;
+    message.error("upload error");
+  }
+};
+
+// 控制抽屉的开关
+const visible = ref<boolean>(false);
+// from表单内容
+const blogvalue = reactive<blogvaluets>({
+  title: "",
+  content: "",
+  htmlcontent: "",
+  type: "",
+  author: "",
+  cover: "",
+  introduce: "",
+  topping: false,
+});
 
 const tagsfetch = async () => {
   const date: any = await TagList({
@@ -125,42 +208,58 @@ const tagsfetch = async () => {
   }));
 };
 
+const usersfetch = async () => {
+  const data: any = await UserListFuc();
+  UserOption.value = data.data.map((v: any) => ({
+    value: v.id,
+    label: v.username,
+  }));
+};
+
 const tagsValueOnChang = (val: string) => {
-  for (var i = 0; i < tagslist.value.length; i++) {
-    if (tagslist.value[i].id == val) {
-      const data = tagslist.value[i].superiors?.map((v: Tags) => ({
-        value: v.id,
-        label: v.name,
-      }));
-      tagsoption.value = data;
-    }
-  }
+  const data = tagslist.value.filter((item: Tags, index: number) => {
+    return item.id == val;
+  });
+  tagsoption.value = data[0].superiors?.map((v: Tags) => ({
+    value: v.id,
+    label: v.name,
+  }));
   delete blogvalue.tags;
+};
+
+const onUploadImg = async (
+  files: FileList,
+  callback: (urls: string[]) => void
+) => {
+  const res = await Promise.all(
+    Array.from(files).map((file) => {
+      return new Promise((rev, rej) => {
+        const form = new FormData();
+        form.append("file", file);
+        fucupload(form, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+          .then((res) => rev(res))
+          .catch((error) => rej(error));
+      });
+    })
+  );
+  callback(res.map((item: any) => item.data.url));
+};
+
+const onHtmlChanged = (html: string) => {
+  blogvalue.htmlcontent = html;
+};
+
+const onSubmit = () => {
+  BlogCreateFuc(blogvalue);
 };
 
 onMounted(() => {
   tagsfetch();
-});
-
-// 控制抽屉的开关
-const visible = ref<boolean>(false);
-//
-const typeopions = ref<option[]>([
-  { label: "x", value: "x" },
-  { label: "x", value: "x" },
-  { label: "x", value: "x" },
-]);
-
-// from表单内容
-const blogvalue = reactive<blogvaluets>({
-  title: "",
-  content: "",
-  htmlcontent: "",
-  type: "",
-  author: "",
-  cover: "",
-  introduce: "",
-  topping: false,
+  usersfetch();
 });
 </script>
 

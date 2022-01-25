@@ -6,7 +6,7 @@ import {
   EditOutlined,
   VerifiedOutlined,
 } from "@ant-design/icons-vue";
-import { ref } from "vue";
+import { ref} from "vue";
 const selectedKeys = ref<string[]>(["1"]);
 const collapsed = ref<boolean>(false);
 </script>
@@ -41,7 +41,7 @@ const collapsed = ref<boolean>(false);
             </template>
             <template #title>管理博客</template>
             <a-menu-item key="3-1">
-              <router-link to="/blogcreate"> 博客列表 </router-link>
+              <router-link to="/blog/list"> 博客列表 </router-link>
             </a-menu-item>
             <a-menu-item key="3-2">
               <router-link to="/blog/tags"> 博客分类 </router-link>

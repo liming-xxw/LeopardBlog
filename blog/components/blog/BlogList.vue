@@ -1,16 +1,18 @@
 <template>
   <div class="bloglist">
     <blog-list-template
-      v-for="(data, index) in date"
+      v-for="(data, index) in data.data"
       :key="index"
       :data="data"
     ></blog-list-template>
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+import { BlogListFuc } from "../../service/blog";
 interface List {
-  title: String;
+  id: number;
+  title?: String | undefined;
   introduce: String;
   tags: String;
   date: String;
@@ -20,66 +22,10 @@ interface List {
   comments: String;
 }
 
-import { BlogList } from '../../service/bloglist'
-export default {
-  setup() {
-    onMounted(async () => {
-      const data =  await BlogList();
-      console.log(data);
-    });
-
-    const date = ref<List[]>([
-      {
-        title: "一个基于SpringBoot+vue的学生信息管理系统详细设计1",
-        introduce:
-          "12 月 3 日，历史上的今天，Fortran 语言之父 John Warner Backus 出生",
-        tags: "vue",
-        date: "2021-12-3",
-        views: "100",
-        links: "100",
-        collections: "100",
-        comments: "100",
-      },
-      {
-        title: "一个基于SpringBoot+vue的学生信息管理系统详细设计2",
-        introduce:
-          "12 月 3 日，历史上的今天，Fortran 语言之父 John Warner Backus 出生",
-        tags: "nestjs",
-        date: "2021-12-3",
-        views: "1000",
-        links: "1000",
-        collections: "100",
-        comments: "10000000",
-      },
-      {
-        title: "一个基于SpringBoot+vue的学生信息管理系统详细设计3",
-        introduce:
-          "12 月 3 日，历史上的今天，Fortran 语言之父 John Warner Backus 出生",
-        tags: "java",
-        date: "2021-12-3",
-        views: "100",
-        links: "100",
-        collections: "100",
-        comments: "100",
-      },
-      {
-        title: "一个基于SpringBoot+vue的学生信息管理系统详细设计",
-        introduce:
-          "12 月 3 日，历史上的今天，Fortran 语言之父 John Warner Backus 出生",
-        tags: "vue",
-        date: "2021-12-3",
-        views: "100",
-        links: "100",
-        collections: "100",
-        comments: "100",
-      },
-    ]);
-
-    return {
-      date,
-    };
-  },
-};
+const { data } = await useAsyncData(
+  "bloglist",
+  async () => await BlogListFuc()
+);
 </script>
 
 <style lang="scss" scoped>

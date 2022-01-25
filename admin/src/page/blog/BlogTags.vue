@@ -46,7 +46,7 @@
             <span> {{ name }} </span>
           </template>
         </a-table-column>
-        <a-table-column key="createdAt" title="创建成功" data-index="createdAt">
+        <a-table-column key="createdAt" title="创建日期" data-index="createdAt">
           <template #default="{ text: createdAt }">
             <span v-text="day(createdAt)"></span>
           </template>
@@ -55,7 +55,7 @@
           <template #default="{ record }">
             <span>
               <a-button type="link" @click="tagsUpdate(record)">编辑</a-button>
-              <a-divider type="vertical" />
+              <a-divider type="vertical" v-show="record.grade != 1" />
               <a-popconfirm
                 title="确认删除该标签"
                 ok-text="确认"
@@ -64,6 +64,10 @@
               >
                 <a-button v-show="record.grade != 1" type="link">删除</a-button>
               </a-popconfirm>
+              <a-divider type="vertical" />
+              <a-button type="link" @click="tagsCreate(record.id)"
+                >新增</a-button
+              >
             </span>
             <a-modal
               v-model:visible="visible"
@@ -98,6 +102,31 @@
                 </a-form-item>
               </a-form>
             </a-modal>
+            <a-modal
+              v-model:visible="visibleCreate"
+              title="新增"
+              @ok="TagCreateClick"
+              :mask="false"
+              okText="确认"
+              cancelText="取消"
+            >
+              <a-form
+                :model="TagCreateValue"
+                :label-col="{ span: 4 }"
+                :wrapper-col="{ span: 17 }"
+              >
+                <a-form-item label="标签">
+                  <a-input v-model:value="TagCreateValue.name" />
+                </a-form-item>
+                <!-- <a-form-item label="标签">
+                  <a-select
+                    v-model:value="TagCreateValue.superiorid"
+                    placeholder="选择父级分类"
+                    :options="TagOption"
+                  ></a-select>
+                </a-form-item> -->
+              </a-form>
+            </a-modal>
           </template>
         </a-table-column>
       </a-table>
@@ -107,7 +136,7 @@
 
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from "vue";
-import { TagList, TagDelete, TagUpdate } from "../../service/Tags";
+import { TagList, TagDelete, TagUpdate, TagCreate } from "../../service/Tags";
 import { option } from "../../interface/interfaceUtils";
 import { message } from "ant-design-vue";
 import { day } from "../../utils/dateUtils";
@@ -118,6 +147,7 @@ interface Tags {
   updateAt?: string;
   superiors?: [];
   superiorid?: string;
+  grade?: string;
 }
 
 const tagslist = ref<Tags[]>([]);
@@ -125,9 +155,14 @@ const TagUpdateValue = reactive<Tags>({
   name: "",
   superiors: [],
 });
+const TagCreateValue = reactive<Tags>({
+  name: "",
+  superiorid: "",
+});
 const TagOption = ref<option[]>([]);
 
 const visible = ref<boolean>(false);
+const visibleCreate = ref<boolean>(false);
 
 const tagsfetch = async () => {
   const date: any = await TagList({
@@ -140,7 +175,6 @@ const tagsfetch = async () => {
     value: v.id,
     label: v.name,
   }));
-  console.log(TagOption);
 };
 
 const tagsDelete = async (id: string) => {
@@ -169,6 +203,23 @@ const TagUpdateClick = async () => {
     visible.value = false;
   } else {
     message.error("修改成功,请检查id");
+  }
+};
+
+const tagsCreate = (id: string) => {
+  visibleCreate.value = true;
+  TagCreateValue.superiorid = id;
+  TagCreateValue.grade = "2";
+};
+
+const TagCreateClick = async () => {
+  const data = await TagCreate(TagCreateValue);
+  if (data.code == 200) {
+    message.success("添加成功");
+    tagsfetch();
+    visibleCreate.value = false;
+  } else {
+    message.error("添加失败,请检查id");
   }
 };
 

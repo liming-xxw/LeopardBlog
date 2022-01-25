@@ -16,6 +16,4 @@ export class User {
 
      @Column({default:"https://leopardblog.oss-cn-hangzhou.aliyuncs.com/478c7caf1ae749fd7c0bc13269052dc3.png"})
      avatar:string
-
-
 }

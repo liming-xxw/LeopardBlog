@@ -1,2 +1,3 @@
 
-export const TaskItemList = "admin/taskitems";
+export const BlogList = "/server/blogs";
+export const BlogFindId = "/server/blogs";

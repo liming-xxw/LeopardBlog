@@ -29,13 +29,22 @@ export default {
     MenuAlt1Icon,
     Switch,
   },
-  setup(props,ctx) {
+  setup(props, ctx) {
     const enabled = ref(false);
     const sldebar = ref<boolean>(false);
 
+    watch(
+      () => enabled.value,
+      (val) => {
+        val
+          ? window.document.documentElement.setAttribute("data-theme", "theme1")
+          : window.document.documentElement.setAttribute("data-theme", "");
+      }
+    );
+
     const SldebarClick = () => {
       sldebar.value = !sldebar.value;
-      ctx.emit("change",sldebar.value);
+      ctx.emit("change", sldebar.value);
     };
     return { enabled, sldebar, SldebarClick };
   },

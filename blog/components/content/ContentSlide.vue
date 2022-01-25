@@ -1,6 +1,6 @@
 <template>
   <div class="content-box">
-    <div class="content-slide    bg-white shadow-md rounded-md">
+    <div class="content-slide rounded-md">
       <div class="slide-items">
         <content-admin-project />
         <div></div>
@@ -18,11 +18,13 @@
 </template>
 
 <style lang="scss" scoped>
-.content-box{
+@import "../../assets/mixin.scss";
+.content-box {
   position: relative;
 }
 .content-slide {
-  // padding: 20px;
+  @include box_shadow($box-shadow-color);
+  @include bg-color($background-color-dark);
 }
 .button-list {
   position: absolute;
