@@ -1,9 +1,9 @@
 <template>
   <div class="bloglist">
     <blog-list-template
-      v-for="(data, index) in data.data"
+      v-for="(item, index) in data.data"
       :key="index"
-      :data="data"
+      :data="item"
     ></blog-list-template>
   </div>
 </template>

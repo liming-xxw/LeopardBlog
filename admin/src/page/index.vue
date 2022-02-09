@@ -6,9 +6,12 @@ import {
   EditOutlined,
   VerifiedOutlined,
 } from "@ant-design/icons-vue";
-import { ref} from "vue";
+
+import { ref } from "vue";
 const selectedKeys = ref<string[]>(["1"]);
 const collapsed = ref<boolean>(false);
+
+
 </script>
 
 <template>

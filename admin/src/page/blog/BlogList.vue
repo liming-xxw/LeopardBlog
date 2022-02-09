@@ -115,7 +115,7 @@
         <a-table-column key="action" title="操作">
           <template #default="{ record }">
             <span>
-              <a>编辑</a>
+                <router-link :to="`/blog/update/${record.id}`"  tag="a" >编辑</router-link>
               <a-divider type="vertical" />
               <a @click="BlogDelete(record.id)">删除</a>
             </span>

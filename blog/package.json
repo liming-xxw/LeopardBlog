@@ -1,5 +1,6 @@
 {
   "private": true,
+  "license": "MIT",
   "scripts": {
     "dev": "nuxi dev",
     "build": "nuxi build",

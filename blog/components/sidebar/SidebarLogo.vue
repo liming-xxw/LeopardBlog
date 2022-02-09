@@ -18,7 +18,7 @@ export default {
       type: Boolean,
     },
   },
-  setup(props) {},
+  setup() {},
 };
 </script>
 

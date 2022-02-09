@@ -93,14 +93,15 @@
 
 <script lang="ts" setup>
 import { uploadcard } from "../../service/api";
+import { useRoute } from "vue-router";
 import MdEditor from "md-editor-v3";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons-vue";
 import "md-editor-v3/lib/style.css";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref,toRefs } from "vue";
 import { TagList } from "../../service/Tags";
 import { fucupload } from "../../service/upload";
 import { option, Tags } from "../../interface/interfaceUtils";
-import { BlogCreateFuc } from "../../service/blog";
+import { BlogCreateFuc, BlogList } from "../../service/blog";
 import { Item } from "ant-design-vue/lib/menu";
 import { message } from "ant-design-vue";
 import { UserListFuc } from "../../service/user";
@@ -150,34 +151,23 @@ function getBase64(img: Blob, callback: (base64Url: string) => void) {
   reader.addEventListener("load", () => callback(reader.result as string));
   reader.readAsDataURL(img);
 }
-
-const beforeUpload = (file: FileItem) => {
-  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-  if (!isJpgOrPng) {
-    message.error("You can only upload JPG file!");
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error("Image must smaller than 2MB!");
-  }
-  return isJpgOrPng && isLt2M;
-};
-
-const handleChange = (info: FileInfo) => {
-  if (info.file.status === "uploading") {
-    loading.value = true;
-    return;
-  }
-  if (info.file.status === "done") {
-    blogvalue.cover = info.file.response?.url;
-    getBase64(info.file.originFileObj, (base64Url: string) => {
-      imageUrl.value = base64Url;
-      loading.value = false;
+const route = useRoute();
+const routeFuc = async () => {
+  const id = route.params.id;
+  if (id != undefined) {
+    const data = await BlogList({
+      search: {
+        id: id,
+      },
     });
-  }
-  if (info.file.status === "error") {
-    loading.value = false;
-    message.error("upload error");
+    const { title ,content,type,author,cover,introduce}  = toRefs(data.data[0])
+    blogvalue.title=title
+    blogvalue.content=content
+    blogvalue.type=data.data[0].type?.id
+    blogvalue.author=data.data[0].author?.id
+    blogvalue.cover = cover
+    blogvalue.introduce=introduce
+    
   }
 };
 
@@ -257,9 +247,40 @@ const onSubmit = () => {
   BlogCreateFuc(blogvalue);
 };
 
+const beforeUpload = (file: FileItem) => {
+  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+  if (!isJpgOrPng) {
+    message.error("You can only upload JPG file!");
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    message.error("Image must smaller than 2MB!");
+  }
+  return isJpgOrPng && isLt2M;
+};
+
+const handleChange = (info: FileInfo) => {
+  if (info.file.status === "uploading") {
+    loading.value = true;
+    return;
+  }
+  if (info.file.status === "done") {
+    blogvalue.cover = info.file.response?.url;
+    getBase64(info.file.originFileObj, (base64Url: string) => {
+      imageUrl.value = base64Url;
+      loading.value = false;
+    });
+  }
+  if (info.file.status === "error") {
+    loading.value = false;
+    message.error("upload error");
+  }
+};
+
 onMounted(() => {
   tagsfetch();
   usersfetch();
+  routeFuc();
 });
 </script>
 

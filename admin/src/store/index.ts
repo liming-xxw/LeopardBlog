@@ -1,8 +1,14 @@
 import { createStore } from "vuex";
 
 export default createStore({
-  state: {},
-  mutations: {},
+  state: {
+    list: [],
+  },
+  mutations: {
+    listfuc(state, list) {
+      state.list = list;
+    },
+  },
   actions: {},
   modules: {},
 });

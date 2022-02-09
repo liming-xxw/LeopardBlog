@@ -14,14 +14,14 @@ class Paging {
 
 @Injectable()
 export class ApiresultService {
-  async message(message:string,code:number) {
+  async message(code:number,message:string) {
     return {
       message: message,
       code: code,
     };
   }
 
-  MESSAGE(message:string,code:number,data) {
+  MESSAGE(code:number,message:string,data) {
     return {
       message: message,
       code: code,

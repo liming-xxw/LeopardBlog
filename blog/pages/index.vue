@@ -8,8 +8,9 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {};
+<script lang="ts" setup>
+// const options = await useFetch("http://localhost:1121/server/blogs");
+// const xxx = useState("listfuc", () => options);
 </script>
 <style lang="scss">
 @import "../assets/mixin.scss";
