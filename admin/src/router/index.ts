@@ -26,7 +26,17 @@ const routes: Array<RouteRecordRaw> = [
         name: "BlogList",
         component: () => import("../page/blog/BlogList.vue"),
       },
+      {
+        path: "/adminuser/list",
+        name: "AdminuserList",
+        component: () => import("../page/adminuser/AdminuserList.vue"),
+      },
     ],
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("../page/login/login.vue"),
   },
 ];
 

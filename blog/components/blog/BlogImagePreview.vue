@@ -1,12 +1,12 @@
 <template>
-  <transition name="preview">
+  <!-- <transition name="preview"> -->
     <div class="blogPreview" @click="handok" v-show="modelValue">
       <div class="mask"></div>
       <div class="blogimg">
         <img :src="imgurl" alt="" />
       </div>
     </div>
-  </transition>
+  <!-- </transition> -->
 </template>
 
 <script lang="ts" setup>

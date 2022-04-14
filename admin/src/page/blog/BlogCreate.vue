@@ -70,10 +70,14 @@
               class="avatar-uploader"
               :show-upload-list="false"
               :action="uploadcard"
-              :before-upload="beforeUpload"
               @change="handleChange"
             >
-              <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
+              <img
+                v-if="imageUrl"
+                :src="imageUrl"
+                alt="avatar"
+                class="avatar"
+              />
               <div v-else>
                 <loading-outlined v-if="loading"></loading-outlined>
                 <plus-outlined v-else></plus-outlined>
@@ -97,11 +101,11 @@ import { useRoute } from "vue-router";
 import MdEditor from "md-editor-v3";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons-vue";
 import "md-editor-v3/lib/style.css";
-import { onMounted, reactive, ref,toRefs } from "vue";
+import { onMounted, reactive, ref, toRefs } from "vue";
 import { TagList } from "../../service/Tags";
 import { fucupload } from "../../service/upload";
 import { option, Tags } from "../../interface/interfaceUtils";
-import { BlogCreateFuc, BlogList } from "../../service/blog";
+import { BlogCreateFuc, BlogList, BlogUpdateFuc } from "../../service/blog";
 import { Item } from "ant-design-vue/lib/menu";
 import { message } from "ant-design-vue";
 import { UserListFuc } from "../../service/user";
@@ -111,13 +115,14 @@ interface blogvaluets {
   content: string;
   htmlcontent: string;
   type: string;
-  tags?: string;
+  tags?: string | string[];
   author: string;
   cover?: string;
   introduce: string;
   topping: boolean;
   hot?: boolean;
   recommend?: boolean;
+  id?: string;
 }
 
 interface FileItem {
@@ -145,6 +150,7 @@ const tagsoption = ref<option[] | undefined>([]);
 const loading = ref<boolean>(false);
 const imageUrl = ref<string>("");
 const fileList = ref([]);
+const routeFlag = ref<boolean>(false);
 
 function getBase64(img: Blob, callback: (base64Url: string) => void) {
   const reader = new FileReader();
@@ -160,14 +166,30 @@ const routeFuc = async () => {
         id: id,
       },
     });
-    const { title ,content,type,author,cover,introduce}  = toRefs(data.data[0])
-    blogvalue.title=title
-    blogvalue.content=content
-    blogvalue.type=data.data[0].type?.id
-    blogvalue.author=data.data[0].author?.id
-    blogvalue.cover = cover
-    blogvalue.introduce=introduce
-    
+    const {
+      title,
+      content,
+      type,
+      author,
+      cover,
+      introduce,
+      hot,
+      topping,
+      recommend,
+    } = toRefs(data.data[0]);
+    blogvalue.title = title;
+    blogvalue.id = id as any;
+    blogvalue.content = content;
+    blogvalue.type = data.data[0].type?.id;
+    blogvalue.author = data.data[0].author?.id;
+    blogvalue.cover = cover.value;
+    blogvalue.introduce = introduce;
+    blogvalue.hot = hot;
+    blogvalue.topping = topping;
+    blogvalue.recommend = recommend;
+    imageUrl.value = cover.value;
+    loading.value = false;
+    routeFlag.value = true;
   }
 };
 
@@ -183,6 +205,7 @@ const blogvalue = reactive<blogvaluets>({
   cover: "",
   introduce: "",
   topping: false,
+  id: "",
 });
 
 const tagsfetch = async () => {
@@ -200,6 +223,7 @@ const tagsfetch = async () => {
 
 const usersfetch = async () => {
   const data: any = await UserListFuc();
+  console.log(data);
   UserOption.value = data.data.map((v: any) => ({
     value: v.id,
     label: v.username,
@@ -243,8 +267,18 @@ const onHtmlChanged = (html: string) => {
   blogvalue.htmlcontent = html;
 };
 
-const onSubmit = () => {
-  BlogCreateFuc(blogvalue);
+const onSubmit = async () => {
+  if (routeFlag.value) {
+    const data: any = BlogUpdateFuc(blogvalue);
+    if (data?.code != 200) {
+      return false;
+    }
+  } else {
+    const data: any = BlogCreateFuc(blogvalue);
+    if (data?.code != 200) {
+      return false;
+    }
+  }
 };
 
 const beforeUpload = (file: FileItem) => {
@@ -313,5 +347,9 @@ onMounted(() => {
 .ant-upload-select-picture-card .ant-upload-text {
   margin-top: 8px;
   color: #666;
+}
+.avatar {
+  width: 240px;
+  height: 240px;
 }
 </style>

@@ -1,6 +1,21 @@
+<script setup lang="ts">
+import { BlogListFuc } from "../../service/blog";
+// import { useCookie ,setCookie} from 'h3'
+const { data } = await useAsyncData(
+  "bloglist",
+  async () => await BlogListFuc(),
+);
+</script>
+
 <template>
   <div class="blog">
-    <blog-list />
+    <div class="bloglist">
+      <blog-list-template
+        v-for="(item, index) in data.data"
+        :key="index"
+        :data="item"
+      ></blog-list-template>
+    </div>
     <blog-class />
   </div>
 </template>
@@ -13,6 +28,13 @@
   position: relative;
   @media screen and (min-width: 100px) and (max-width: 1644px) {
     flex-direction: column-reverse;
+  }
+  .bloglist {
+    padding: 0px 10px 10px 10px;
+    flex: 0 0 66.66%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
   }
 }
 </style>

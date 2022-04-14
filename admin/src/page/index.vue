@@ -1,74 +1,37 @@
-<script lang="ts" setup>
-import {
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-  DashboardOutlined,
-  EditOutlined,
-  VerifiedOutlined,
-} from "@ant-design/icons-vue";
-
-import { ref } from "vue";
-const selectedKeys = ref<string[]>(["1"]);
-const collapsed = ref<boolean>(false);
-
-
-</script>
-
 <template>
   <div>
     <a-layout style="height: 100vh">
       <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible>
         <div class="logo" />
-        <a-menu theme="dark" mode="inline" v-model:selectedKeys="selectedKeys">
-          <a-sub-menu key="dashboard">
-            <template #icon>
-              <DashboardOutlined />
-            </template>
-            <template #title>控制台</template>
-            <a-menu-item key="1-1">
-              <router-link to="/"> 工作台 </router-link>
+        <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
+          <div v-for="(item, index) in MenuList" :key="'div' + index">
+            <a-sub-menu v-if="item.children" :key="'sub' + index">
+              <template #title>
+                <span>
+                  <component :is="item.icon"></component>
+                  <span>{{ item.title }}</span>
+                </span>
+              </template>
+              <a-menu-item
+                v-for="itemtags in item.children"
+                :key="itemtags.title"
+              >
+                <router-link :to="itemtags.path">
+                  {{ itemtags.title }}
+                </router-link>
+              </a-menu-item>
+            </a-sub-menu>
+            <a-menu-item v-else :key="item.title">
+              <router-link :to="item.path">
+                <component :is="item.icon"></component>
+                {{ item.title }}
+              </router-link>
             </a-menu-item>
-            <a-menu-item key="1-2">
-              <router-link to="/andlysis"> 分析页 </router-link>
-            </a-menu-item>
-          </a-sub-menu>
-          <a-menu-item key="2">
-            <EditOutlined />
-            <router-link to="/blog/create" style="margin-left: 10px">
-              <span>撰写博客</span>
-            </router-link>
-          </a-menu-item>
-          <a-sub-menu key="3">
-            <template #icon>
-              <DashboardOutlined />
-            </template>
-            <template #title>管理博客</template>
-            <a-menu-item key="3-1">
-              <router-link to="/blog/list"> 博客列表 </router-link>
-            </a-menu-item>
-            <a-menu-item key="3-2">
-              <router-link to="/blog/tags"> 博客分类 </router-link>
-            </a-menu-item>
-            <a-menu-item key="3-3">
-              <router-link to="/bloglink"> 友情链接 </router-link>
-            </a-menu-item>
-          </a-sub-menu>
-          <a-sub-menu key="4">
-            <template #icon>
-              <VerifiedOutlined />
-            </template>
-            <template #title>系统管理</template>
-            <a-menu-item key="4-1">
-              <router-link to="/adminuser/list"> 管理员列表 </router-link>
-            </a-menu-item>
-            <a-menu-item key="4-2">
-              <router-link to="/blogclass"> 用户管理 </router-link>
-            </a-menu-item>
-          </a-sub-menu>
+          </div>
         </a-menu>
       </a-layout-sider>
       <a-layout>
-        <a-layout-header style="background: #fff; padding: 0">
+        <a-layout-header class="header">
           <menu-unfold-outlined
             v-if="collapsed"
             class="trigger"
@@ -79,6 +42,9 @@ const collapsed = ref<boolean>(false);
             class="trigger"
             @click="() => (collapsed = !collapsed)"
           />
+          <div>
+            <login />
+          </div>
         </a-layout-header>
         <a-layout-content class="a-layout-content">
           <transition name="router" mode="out-in">
@@ -89,6 +55,77 @@ const collapsed = ref<boolean>(false);
     </a-layout>
   </div>
 </template>
+
+<script setup lang="ts">
+import {
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
+  DashboardOutlined,
+  EditOutlined,
+  VerifiedOutlined,
+} from "@ant-design/icons-vue";
+import { ref } from "vue";
+import login from "../components/login/login.vue";
+interface Menu {
+  icon?: any;
+  title: string;
+  path?: string;
+  children?: Menu[];
+}
+
+const selectedKeys = ref<string[]>(["1"]);
+
+const collapsed = ref<boolean>(false);
+const MenuList = ref<Menu[]>([
+  {
+    icon: DashboardOutlined,
+    title: "控制台",
+    children: [
+      {
+        title: "数据分析",
+        path: "/",
+      },
+    ],
+  },
+  {
+    icon: EditOutlined,
+    title: "撰写博客",
+    path: "/blog/create",
+  },
+  {
+    icon: DashboardOutlined,
+    title: "管理博客",
+    children: [
+      {
+        title: "博客管理",
+        path: "/blog/list",
+      },
+      {
+        title: "标签管理",
+        path: "/blog/tags",
+      },
+      {
+        title: "友链管理",
+        path: "/link/list",
+      },
+    ],
+  },
+  {
+    icon: DashboardOutlined,
+    title: "系统管理",
+    children: [
+      {
+        title: "管理员管理",
+        path: "/adminuser/list",
+      },
+      {
+        title: "用户管理",
+        path: "/tags",
+      },
+    ],
+  },
+]);
+</script>
 
 <style>
 .a-layout-content {
@@ -106,6 +143,13 @@ const collapsed = ref<boolean>(false);
   transition: color 0.3s;
 }
 
+.header {
+  background: #fff;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+  
+}
 .trigger:hover {
   color: #1890ff;
 }

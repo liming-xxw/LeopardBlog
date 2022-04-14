@@ -41,6 +41,10 @@ export class Blog extends BaseEntity {
   @OneToMany(() => BlogAndTag, (tag) => tag.blogid)
   tags: BlogAndTag[];
 
+  @ManyToOne(() => Tag, (Tag) => Tag.id)
+  tag: Tag;
+
+
   @ManyToOne(() => User, (user) => user.nickname)
   author: User;
 

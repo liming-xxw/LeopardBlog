@@ -4,5 +4,7 @@ export class Pading {
     readonly search?: any;
   
     readonly page?: number;
+
+    like:any
   }
   

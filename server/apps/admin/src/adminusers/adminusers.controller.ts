@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { AdminusersService } from './adminusers.service';
 
 @Controller('adminusers')
@@ -6,8 +6,8 @@ export class AdminusersController {
     constructor(private readonly AdminUserService:AdminusersService){}
 
     @Get("")
-    async findAll(){
-        return await this.AdminUserService.findAll();
+    async findAll(@Query() query){
+        return await this.AdminUserService.findAll(query);
     }
 
     @Post("")

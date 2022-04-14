@@ -1,8 +1,8 @@
-import { BlogCreate, BlogDelete } from "./api";
+import { BlogCreate, BlogDelete,BlogUpdate } from "./api";
 import { get, post } from "../utils/axios-request";
 
 const BlogList = async (params?: any) => {
-  const { data } = await get(BlogCreate);
+  const { data } = await get(BlogCreate,params);
   return data;
 };
 
@@ -16,4 +16,9 @@ const BlogDeleteFuc = async (id: string) => {
   return data;
 };
 
-export { BlogCreateFuc, BlogList, BlogDeleteFuc };
+const BlogUpdateFuc = async(body:any)=>{
+  const { data} = await post(BlogUpdate,body)
+  return data;
+}
+
+export { BlogCreateFuc, BlogList, BlogDeleteFuc,BlogUpdateFuc };

@@ -2,20 +2,34 @@
   <div class="content-box">
     <div class="content-slide rounded-md">
       <div class="slide-items">
-        <content-admin-project />
-        <div></div>
+          <content-admin-project v-if="vis" />
+          <flsh-project v-else></flsh-project>
       </div>
     </div>
     <div class="button-list">
       <div
-        class="button-list-but rounded-full button-list-but-active duration-500 ease-in-out bg-blue-400"
+        class="button-list-but rounded-full bg-blue-400"
+        :class="{ 'button-list-but-active': vis }"
+        @click="buttonOnclick(true)"
       ></div>
-      <div class="button-list-but rounded-full duration-500 ease-in-out"></div>
+      <div
+        class="button-list-but rounded-full bg-blue-200"
+        :class="{ 'button-list-but-active': !vis }"
+        @click="buttonOnclick(false)"
+      ></div>
     </div>
   </div>
 
   <content-module-data />
 </template>
+
+<script setup lang="ts">
+import FlshProject from "./FlshProject.vue";
+const vis = ref<boolean>(true);
+const buttonOnclick = (val: boolean) => {
+  vis.value = val;
+};
+</script>
 
 <style lang="scss" scoped>
 @import "../../assets/mixin.scss";
@@ -38,17 +52,16 @@
     flex: 1;
     height: 10px;
     cursor: pointer;
-    color: rgba(0, 0, 0, 0.4);
+    transition: 0.3s;
     &:hover {
-      background-color: #9dbdc6;
+      background-color: #60a5fa;
     }
   }
   .button-list-but-active {
     flex: none;
     width: 40px;
-    &:hover {
-      background-color: red;
-    }
   }
 }
+
+
 </style>

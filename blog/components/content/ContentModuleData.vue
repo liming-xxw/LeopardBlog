@@ -11,9 +11,12 @@
         <p>今日访问量</p>
       </div>
     </div>
-    <div class="ModuleTags"></div>
-    <div class="ModuleTags"></div>
-    <div class="ModuleTags"></div>
+    <div class="flex flex-1 justify-between">
+      <blog-f-box></blog-f-box>
+      <blog-f-box></blog-f-box>
+      <blog-f-box></blog-f-box>
+      <blog-f-box></blog-f-box>
+    </div>
   </div>
 </template>
 
@@ -23,18 +26,17 @@
   margin-top: 30px;
   display: flex;
   gap: 10px;
-  justify-content: space-between;
   flex-wrap: wrap;
   .ModuleTags {
     flex: 0 0 24%;
     // width: 370px;
-    height: 288px;
+    height: 250px;
     .ModuleTags-title {
       font-weight: 700;
       font-size: 23px;
     }
     .ModuleTags-visit {
-        padding-top: 10px;
+      padding-top: 10px;
       h4 {
         font-weight: 700;
         font-size: 40px;

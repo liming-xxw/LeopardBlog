@@ -6,6 +6,7 @@ import { AdminUser } from './entitys/adminuser.entity';
 import { Tag } from './entitys/tag.entity';
 import { Blog } from './entitys/blog.entity';
 import { BlogAndTag } from './entitys/blogandtag.entity';
+import Like from './entitys/like.entity';
 
 const Entity = TypeOrmModule.forFeature([
   User,
@@ -13,6 +14,7 @@ const Entity = TypeOrmModule.forFeature([
   Tag,
   Blog,
   BlogAndTag,
+  Like,
 ]);
 
 @Global()
@@ -25,7 +27,7 @@ const Entity = TypeOrmModule.forFeature([
       username: 'root',
       password: 'xiaoxiwen',
       database: 'leopardblog',
-      entities: [User, AdminUser, Tag, Blog, BlogAndTag],
+      entities: [User, AdminUser, Tag, Blog, BlogAndTag, Like],
       synchronize: true,
     }),
     Entity,

@@ -8,6 +8,7 @@ import { AdminusersModule } from './adminusers/adminusers.module';
 import { BlogsModule } from './blogs/blogs.module';
 import { TagsModule } from './tags/tags.module';
 import { CommonModule } from '@app/common';
+import { AuthModule } from './auth/auth.module';
 const MAO = require('multer-aliyun-oss');
 @Module({
   imports: [
@@ -31,6 +32,7 @@ const MAO = require('multer-aliyun-oss');
     AdminusersModule,
     BlogsModule,
     TagsModule,
+    AuthModule,
   ],
   controllers: [AdminController],
   providers: [AdminService],

@@ -1,11 +1,17 @@
+import { message } from "ant-design-vue";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-export const BASE_URL = "http://localhost:1014/";
+export const BASE_URL = "http://localhost:1014/admin/";
 const Axios = axios.create({
   baseURL: BASE_URL,
 });
 
 Axios.interceptors.request.use(
-  (conflg) => {
+  (conflg: AxiosRequestConfig) => {
+    const token = localStorage.getItem("token");
+    const flag: any = conflg || {};
+    if (token) {
+      flag.headers["Authorization"] = "Bearer " + token;
+    }
     return conflg;
   },
   (error) => {
@@ -22,7 +28,10 @@ Axios.interceptors.response.use(
     }
   },
   (error) => {
-    return Promise.reject(error);
+    if (error.response.status == 401) {
+      message.error(String(error.response.data.message));
+    }
+    return Promise.reject(error.response);
   }
 );
 

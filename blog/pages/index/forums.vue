@@ -1,8 +1,5 @@
 <template>
-  <div> 
-  sadsadasda
-  <div>
-  </div>
-  </div>
+<div>
+  qew
+</div>
 </template>
-

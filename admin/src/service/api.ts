@@ -1,13 +1,19 @@
-export const upload = "/admin/upload";
+export const upload = "/upload";
+export const login = "/auth/login"
+export const AdminUserFindUser = "/auth/findone";
 
-export const uploadcard = `http://localhost:1014${upload}`;
+export const uploadcard = `http://localhost:1014/admin${upload}`;
 
-export const TagsList = "admin/tags";
-export const TagsUpdate = "admin/tags/update";
-export const TagsDelete = "admin/tags/delete";
+export const TagsList = "tags";
+export const TagsUpdate = "tags/update";
+export const TagsDelete = "tags/delete";
 
-export const UserList = "admin/users";
+export const UserList = "users";
 
-export const BlogCreate = "admin/blogs";
-export const BlogDelete = "admin/blogs/delete";
+export const BlogCreate = "blogs";
+export const BlogDelete = "blogs/delete";
+export const BlogUpdate = "blogs/update";
 
+export const AdminUserCreate = "adminusers";
+export const AdminUserDelete = "blogs/delete";
+export const AdminUserUpdate = "blogs/update";

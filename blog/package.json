@@ -8,24 +8,24 @@
     "allupdate": "yarn upgrade-interactive --latest"
   },
   "devDependencies": {
-    "autoprefixer": "10.4.0",
-    "nuxt3": "3.0.0-27277330.202617b",
-    "postcss": "8.3.11",
+    "autoprefixer": "10.4.4",
+    "nuxt3": "3.0.0-27474800.8dd77d7",
+    "postcss": "8.4.12",
     "sass": "1.43.4",
-    "sass-loader": "12.3.0",
-    "tailwindcss": "3.0.0-alpha.1"
+    "sass-loader": "12.6.0",
+    "tailwindcss": "3.0.23"
   },
   "dependencies": {
-    "@headlessui/vue": "^1.4.2",
-    "@heroicons/vue": "1.0.5",
-    "@pinia/nuxt": "0.1.5",
-    "@tailwindcss/aspect-ratio": "0.3.0",
-    "@tailwindcss/forms": "0.4.0-alpha.1",
-    "@tailwindcss/line-clamp": "0.2.2",
-    "@tailwindcss/typography": "0.5.0-alpha.2",
-    "axios": "^0.24.0",
+    "@headlessui/vue": "1.5.0",
+    "@heroicons/vue": "1.0.6",
+    "@pinia/nuxt": "0.1.8",
+    "@tailwindcss/aspect-ratio": "0.4.0",
+    "@tailwindcss/forms": "0.5.0",
+    "@tailwindcss/line-clamp": "0.3.1",
+    "@tailwindcss/typography": "0.5.2",
+    "axios": "^0.26.1",
     "highlight.js": "^11.3.1",
-    "pinia": "2.0.3"
+    "pinia": "2.0.12"
   },
   "engines": {
     "node": "^14.16.0 || ^16.11.0 || ^17.0.0"

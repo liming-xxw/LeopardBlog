@@ -1,4 +1,4 @@
-import { BlogList, BlogFindId } from "./api";
+import { BlogList, BlogFindId, BlogHot } from "./api";
 import { get } from "../utils/axios-request";
 
 const BlogListFuc = async (params?: object) => {
@@ -11,4 +11,9 @@ const BlogFindById = async (id: string, params?: object) => {
   return data;
 };
 
-export { BlogListFuc, BlogFindById };
+const BlogHotList = async (params?: object) => {
+  const { data } = await get(BlogHot, params);
+  return data
+};
+
+export { BlogListFuc, BlogFindById,BlogHotList };

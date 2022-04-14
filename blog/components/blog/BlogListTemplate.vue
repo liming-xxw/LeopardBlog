@@ -14,8 +14,15 @@
             {{ data.introduce }}
           </div>
           <div class="blog-list-tmplate-item-introduce-b">
-            前端:{{ data.tags }}
-            <p>{{ data.date }}</p>
+            {{ data.type.name }}:
+            <span
+              v-for="(itemx, index) in data.items"
+              :key="index"
+              style="margin-left: 10px"
+            >
+              {{ itemx?.tagid.name }}
+            </span>
+            <p>{{ data.createdAt }}</p>
           </div>
         </div>
       </div>
@@ -80,7 +87,10 @@ export default {
       },
     },
   },
-  setup() {},
+  setup() {
+    return {
+    };
+  },
 };
 </script>
 

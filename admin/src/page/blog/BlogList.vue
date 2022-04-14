@@ -4,16 +4,22 @@
       <div class="header">
         <a-row :gutter="16">
           <a-col class="gutter-row" :span="6">
-            <a-form-item label="搜索博客分类">
+            <a-form-item label="搜索博客">
               <a-input-search
-                placeholder="搜索博客大分类"
+                v-model:value="Like.title"
+                placeholder="搜索博客"
                 style="width: 200px"
               />
             </a-form-item>
           </a-col>
           <a-col class="gutter-row" :span="6">
             <a-form-item label="子分类">
-              <a-input-search placeholder="搜索博客子分类" />
+              <a-select
+                v-model:value="Like.tag"
+                :options="options"
+                style="width: 200px"
+                :allowClear="true"
+              ></a-select>
             </a-form-item>
           </a-col>
           <a-col class="gutter-row" :span="6">
@@ -91,13 +97,13 @@
           key="topping"
           title="置顶"
           data-index="topping"
-          :width="50"
+          :width="70"
         >
           <template #default="{ text: topping }">
             <a-switch :checked="topping" />
           </template>
         </a-table-column>
-        <a-table-column key="hot" title="热门" data-index="hot" :width="50">
+        <a-table-column key="hot" title="热门" data-index="hot" :width="70">
           <template #default="{ text: hot }">
             <a-switch :checked="hot" />
           </template>
@@ -106,7 +112,7 @@
           key="recommend"
           title="推荐"
           data-index="recommend"
-          :width="50"
+          :width="70"
         >
           <template #default="{ text: recommend }">
             <a-switch :checked="recommend" />
@@ -115,7 +121,9 @@
         <a-table-column key="action" title="操作">
           <template #default="{ record }">
             <span>
-                <router-link :to="`/blog/update/${record.id}`"  tag="a" >编辑</router-link>
+              <router-link :to="`/blog/update/${record.id}`" tag="a"
+                >编辑</router-link
+              >
               <a-divider type="vertical" />
               <a @click="BlogDelete(record.id)">删除</a>
             </span>
@@ -126,8 +134,11 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, reactive, ref, toRefs, watch } from "vue";
 import { BlogList, BlogDeleteFuc } from "../../service/blog";
+import { TagList } from "../../service/Tags";
+import { Tags, option } from "../../interface/interfaceUtils";
+
 interface blogs {
   id: number;
   title: string;
@@ -141,15 +152,64 @@ interface blogs {
 }
 
 const bloglist = ref<blogs[]>([]);
+const options = ref<option[]>();
+const search = ref<string>("");
+const Like = reactive<{ title?: string; tag?: string }>({});
 
-const fetch = async () => {
+watch(
+  () => Like,
+  (val) => {
+    console.log(val);
+    blogfetch();
+  },
+  {
+    deep: true,
+  }
+);
+
+const blogfetch = async () => {
+  // Like.title === "" ? delete Like.title : Like.title;
+  // search.value = "blog.title LIKE   :title";
+  // const query = {
+  //   search: search.value,
+  //   like: Like,
+  // };
+  // const query = {
+  //   search: search.value,
+  //   like: {
+  //     title: `%测试%`,
+  //   },
+  // };
+  const query = {
+    search: "blog.title LIKE:title",
+    like: {
+      title: "ccc",
+    },
+  };
   const data = await BlogList();
   bloglist.value = data.data;
+  console.log(data);
+};
+
+const fetch = async () => {
+  blogfetch();
+  const tagslist = await TagList({
+    search: {
+      grade: 1,
+    },
+  });
+  options.value = tagslist.data.map((v: Tags) => ({
+    label: v.name,
+    value: v.id,
+    options: v.superiors?.map((a: Tags) => ({
+      label: a.name,
+      value: a.id,
+    })),
+  }));
 };
 
 const BlogDelete = async (id: string) => {
   const { data } = await BlogDeleteFuc(id);
-  console.log(data);
   fetch();
 };
 

@@ -21,36 +21,21 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { ViewListIcon } from "@heroicons/vue/outline";
-export default {
-  name: "sidebar",
-  components: {
-    ViewListIcon,
-  },
-  setup() {
-    const visible = ref<boolean>(false);
-    const sidebar_but_tran = ref<number>(0);
-    const sldebar = ref<boolean>(false);
-    const VisibleClick = () => {
-      visible.value = !visible.value;
-      sidebar_but_tran.value == 0
-        ? (sidebar_but_tran.value = 16.625)
-        : (sidebar_but_tran.value = 0);
-    };
 
-    const SidebarChang = (val: boolean) => {
-      sldebar.value = val;
-    };
+const visible = ref<boolean>(false);
+const sidebar_but_tran = ref<number>(0);
+const sldebar = ref<boolean>(false);
+const VisibleClick = () => {
+  visible.value = !visible.value;
+  sidebar_but_tran.value == 0
+    ? (sidebar_but_tran.value = 16.625)
+    : (sidebar_but_tran.value = 0);
+};
 
-    return {
-      visible,
-      sldebar,
-      sidebar_but_tran,
-      VisibleClick,
-      SidebarChang,
-    };
-  },
+const SidebarChang = (val: boolean) => {
+  sldebar.value = val;
 };
 </script>
 

@@ -10,7 +10,12 @@ export class BlogsController {
     return await this.BlogService.findAll(query);
   }
 
-  @Get('/:id')
+  @Get('hotlist')
+  async hotLisy(@Query() query) {
+    return await this.BlogService.hotlist(query);
+  }
+
+  @Get('findone/:id')
   async findById(@Param('id') id) {
     return await this.BlogService.findById(id);
   }

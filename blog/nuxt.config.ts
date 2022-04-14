@@ -3,9 +3,10 @@ import { defineNuxtConfig } from "nuxt3";
 export default defineNuxtConfig({
   buildModules: [
     // pinia plugin - https://pinia.esm.dev
-    ["@pinia/nuxt"],
+    "@pinia/nuxt",
   ],
   build: {
+    transpile: ["@heroicons/vue"],
     postcss: {
       postcssOptions: {
         plugins: {
@@ -13,6 +14,18 @@ export default defineNuxtConfig({
           autoprefixer: {},
         },
       },
+    },
+  },
+  vite: {
+    logLevel: "info",
+    optimizeDeps: {
+      include: [
+        "@headlessui/vue",
+        "@heroicons/vue/solid",
+        "@heroicons/vue/outline",
+        "vue",
+        "pinia",
+      ],
     },
   },
   meta: {
